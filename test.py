@@ -12,7 +12,9 @@ decoded_content = response.content.decode('utf-8')
 root = ET.fromstring(decoded_content)
 
 # Find all the item elements
+# ? 먼저 인스턴스 하나하나를 감싸고 있는 item을 먼저 가져온다 ==> 인스턴스 단위로 먼저 나눈다 
 items = root.findall('.//item')
+print(items);
 
 # Extract districtName elements from the first 10 items
 district_names = [item.find('districtName').text for item in items[:10]]
