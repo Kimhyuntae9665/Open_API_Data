@@ -1,5 +1,5 @@
 import requests
-import xml.etree.ElementTree as ET
+import json
 
 url = 'http://apis.data.go.kr/B552584/UlfptcaAlarmInqireSvc/getUlfptcaAlarmInfo'
 params = {
@@ -12,23 +12,15 @@ params = {
 }
 
 response = requests.get(url, params=params)
-decoded_content = response.content.decode('utf-8')
+data = response.json()
+# ? data 항목에서 response,body,items 항목에 접근 하는 것 더 더 안으로 접근하는 느낌 
+items = data['response']['body']['items']
 
-
-
-# Parse the XML data
-root = ET.fromstring(decoded_content)
-
-# Find all the item elements
-items = root.findall('.//item')
-
-
-
-# Iterate over items and check issueGbn
+# Iterate over items and check districtName
 index = 1
 for item in items:
-    district_name = item.find('districtName').text
-    issue_val = item.find('issueVal').text
+    district_name = item['districtName']
+    issue_val = item['issueVal']
 
     # Check if districtName is "경기" and print issueVal with index
     if district_name == '경기':
